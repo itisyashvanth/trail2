@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import AppShell from './components/layout/AppShell';
 import DashboardPage from './pages/DashboardPage';
 import ProfilePage from './pages/ProfilePage';
@@ -8,7 +8,7 @@ import LandingPage from './pages/landing/LandingPage';
 
 function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <Routes>
         {/* Landing Page */}
         <Route path="/" element={<LandingPage />} />
@@ -26,7 +26,7 @@ function App() {
         
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 }
 
