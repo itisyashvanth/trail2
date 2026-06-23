@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Zap, Lightbulb, Flame, PackageOpen, Pause, Trophy } from 'lucide-react';
+import { Heart, Zap, Lightbulb, Flame, PackageOpen, Pause, Trophy, Coins, Dog, CheckCircle2, XCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-const T = {
-  bg: '#0A0A1A',
-  card: 'rgba(18,10,45,0.95)',
-  cardBorder: 'rgba(139,92,246,0.2)',
-  surface: '#12123A',
-  surfaceBorder: '#1e1e3a',
-  teal: '#00D4C8',
-  lime: '#B8F400',
+const B    = '3px solid #000';
+const SH   = '5px 5px 0 #000';
+const SH_SM = '3px 3px 0 #000';
+
+const PALETTE = {
+  bg:     '#0D0D1A',
+  base:   '#1A1A2E',
+  teal:   '#00D4C8',
+  lime:   '#B8F400',
   violet: '#8B5CF6',
   orange: '#F97316',
-  muted: '#566C86',
-  text: '#F4F4F4',
-  textSub: '#7B8DB0',
+  text:   '#F4F4F4',
+  muted:  '#94A3B8',
 };
 
 const QUESTION = {
@@ -23,10 +23,10 @@ const QUESTION = {
   title: 'What is a Diversified Portfolio?',
   body: 'Spreading investments across different asset classes to reduce risk is a core principle of sound financial planning.',
   answers: [
-    { id: 'a', text: 'Putting all money in one high-return stock',    color: T.violet, textColor: '#fff'       },
-    { id: 'b', text: 'Mixing stocks, bonds and cash to reduce risk',  color: T.teal,   textColor: '#0A0A1A', correct: true },
-    { id: 'c', text: 'Saving every coin in a single savings account', color: T.orange, textColor: '#fff'       },
-    { id: 'd', text: 'Only investing in government bonds',            color: T.lime,   textColor: '#0A0A1A'   },
+    { id: 'a', text: 'Putting all money in one high-return stock',    color: PALETTE.violet, textColor: '#fff'       },
+    { id: 'b', text: 'Mixing stocks, bonds and cash to reduce risk',  color: PALETTE.teal,   textColor: '#000', correct: true },
+    { id: 'c', text: 'Saving every coin in a single savings account', color: PALETTE.orange, textColor: '#000'       },
+    { id: 'd', text: 'Only investing in government bonds',            color: PALETTE.lime,   textColor: '#000'   },
   ],
 };
 
@@ -49,58 +49,58 @@ export default function QuizPage() {
   const isCorrect = (id) => QUESTION.answers.find(a => a.id === id)?.correct;
 
   return (
-    <div className="w-full min-h-screen px-4 md:px-8 pt-8 pb-24" style={{ background: T.bg }}>
-      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+    <div className="w-full min-h-screen px-6 md:px-10 pt-8 pb-28 font-sans" style={{ background: PALETTE.bg }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
 
         {/* ── Top Status Bar ── */}
         <motion.div
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-center justify-between mb-8 px-6 py-4 rounded-2xl"
-          style={{ background: T.card, border: `1px solid ${T.cardBorder}` }}
+          className="flex items-center justify-between mb-8 px-6 py-4"
+          style={{ background: PALETTE.base, border: B, boxShadow: SH }}
         >
           {/* Left: lives */}
           <div className="flex items-center gap-4">
             <button
               onClick={() => navigate(-1)}
-              className="text-sm font-bold px-4 py-2 rounded-xl transition-all hover:bg-white/10"
-              style={{ border: `1px solid ${T.surfaceBorder}`, color: T.textSub }}
+              className="font-black uppercase tracking-wider text-sm px-4 py-3 transition-all hover:-translate-y-0.5"
+              style={{ background: PALETTE.base, border: B, color: PALETTE.text, boxShadow: SH_SM }}
             >
               ← Back
             </button>
-            <div className="flex items-center gap-1.5 px-4 py-2 rounded-xl" style={{ border: `1px solid ${T.surfaceBorder}` }}>
+            <div className="flex items-center gap-2 px-4 py-3" style={{ background: PALETTE.base, border: B, boxShadow: SH_SM }}>
               {[1, 2, 3].map(i => (
-                <Heart key={i} size={20} fill={i <= lives ? '#ef4444' : 'none'} color={i <= lives ? '#ef4444' : T.muted} />
+                <Heart key={i} size={18} fill={i <= lives ? '#ef4444' : 'none'} color={i <= lives ? '#ef4444' : PALETTE.muted} />
               ))}
             </div>
           </div>
 
           {/* Center: progress */}
           <div className="flex items-center gap-4 flex-1 max-w-xs mx-8">
-            <span className="text-xs font-black shrink-0" style={{ color: T.textSub }}>{CURRENT_Q}/{ALL_QUESTIONS}</span>
-            <div className="flex-1 h-2.5 rounded-full" style={{ background: T.surfaceBorder }}>
+            <span className="font-black text-sm shrink-0" style={{ color: PALETTE.muted }}>{CURRENT_Q}/{ALL_QUESTIONS}</span>
+            <div className="flex-1 h-3" style={{ background: '#2a2a4a', border: B }}>
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: `${(CURRENT_Q / ALL_QUESTIONS) * 100}%` }}
                 transition={{ duration: 0.8, ease: 'easeOut' }}
-                className="h-full rounded-full"
-                style={{ background: `linear-gradient(90deg,${T.violet},${T.teal})` }}
+                className="h-full"
+                style={{ background: PALETTE.teal }}
               />
             </div>
-            <span className="text-xs font-black flex items-center gap-1 shrink-0" style={{ color: T.lime }}>
-              <Zap size={12} fill="currentColor" /> +50 XP
+            <span className="font-black text-sm flex items-center gap-1 shrink-0" style={{ color: PALETTE.lime }}>
+              <Zap size={14} fill="currentColor" /> +50 XP
             </span>
           </div>
 
           {/* Right: coins + pause */}
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 px-4 py-2 rounded-xl" style={{ border: `1px solid ${T.surfaceBorder}` }}>
-              <span className="text-base">🪙</span>
+            <div className="flex items-center gap-2 px-4 py-3" style={{ background: PALETTE.base, border: B, boxShadow: SH_SM }}>
+              <Coins size={18} color="#FFCD75" />
               <span className="font-black text-sm" style={{ color: '#FFCD75' }}>320</span>
             </div>
             <button
-              className="p-2.5 rounded-xl transition-all hover:bg-white/10"
-              style={{ border: `1px solid ${T.surfaceBorder}`, color: T.textSub }}
+              className="p-3 transition-all hover:-translate-y-0.5"
+              style={{ background: PALETTE.base, border: B, color: PALETTE.muted, boxShadow: SH_SM }}
             >
               <Pause size={18} />
             </button>
@@ -108,7 +108,7 @@ export default function QuizPage() {
         </motion.div>
 
         {/* ── Main 2-column layout ── */}
-        <div className="flex gap-8 items-start">
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-10 items-start">
 
           {/* ── Left Column: Question + Answers ── */}
           <div className="flex-1 min-w-0 flex flex-col gap-6">
@@ -118,21 +118,21 @@ export default function QuizPage() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="p-8 rounded-2xl"
-              style={{ background: T.card, border: `1px solid ${T.cardBorder}` }}
+              className="p-8"
+              style={{ background: PALETTE.base, border: B, boxShadow: SH }}
             >
-              <p className="text-xs font-black tracking-widest uppercase mb-3" style={{ color: T.teal }}>
+              <p className="font-black text-xs uppercase tracking-widest mb-3" style={{ color: PALETTE.teal }}>
                 {QUESTION.chapter}
               </p>
-              <h2 className="text-2xl font-black leading-snug mb-3" style={{ color: T.text }}>
+              <h2 className="font-black text-2xl uppercase tracking-tight mb-3" style={{ color: PALETTE.text, lineHeight: 1.2 }}>
                 {QUESTION.title}
               </h2>
-              <p className="text-sm leading-relaxed" style={{ color: T.textSub }}>
+              <p className="font-bold text-sm leading-relaxed" style={{ color: PALETTE.muted }}>
                 {QUESTION.body}
               </p>
             </motion.div>
 
-            {/* Answer grid — 2×2, the primary focal point of the entire page */}
+            {/* Answer grid */}
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
@@ -151,69 +151,68 @@ export default function QuizPage() {
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: fadedOut ? 0.35 : 1, scale: 1 }}
                     transition={{ delay: 0.22 + i * 0.06 }}
-                    whileHover={!revealed ? { scale: 1.02, y: -2 } : {}}
-                    whileTap={!revealed ? { scale: 0.98 } : {}}
+                    whileHover={!revealed ? { y: -2, boxShadow: '7px 7px 0 #000' } : {}}
                     onClick={() => handleSelect(ans.id)}
                     disabled={revealed}
-                    className="relative p-6 rounded-2xl text-left font-bold text-base leading-snug transition-all flex flex-col justify-between"
+                    className="relative p-6 text-left font-black text-base leading-snug transition-all flex flex-col justify-between"
                     style={{
                       background: ans.color,
                       color: ans.textColor,
-                      minHeight: 130,
+                      minHeight: 140,
                       cursor: revealed ? 'default' : 'pointer',
                       border: correctRevealed
-                        ? `3px solid ${T.lime}`
+                        ? `4px solid ${PALETTE.lime}`
                         : wrongSelected
-                        ? '3px solid #ef4444'
-                        : '3px solid transparent',
-                      boxShadow: correctRevealed
-                        ? `0 0 28px rgba(184,244,0,0.4), 4px 4px 0 rgba(0,0,0,0.3)`
-                        : '4px 4px 0 rgba(0,0,0,0.3)',
+                        ? '4px solid #ef4444'
+                        : B,
+                      boxShadow: correctRevealed ? `0 0 0 4px ${PALETTE.lime}, 5px 5px 0 #000` : SH,
                     }}
                   >
-                    <span className="text-xs font-black uppercase opacity-50 mb-2">
+                    <span className="text-xs font-black uppercase opacity-60 mb-3" style={{ color: ans.textColor }}>
                       {String.fromCharCode(65 + i)}
                     </span>
                     <span>{ans.text}</span>
 
                     {/* Result icons */}
                     {correctRevealed && (
-                      <motion.span
+                      <motion.div
                         initial={{ scale: 0, rotate: -20 }}
                         animate={{ scale: 1, rotate: 0 }}
-                        className="absolute top-3 right-4 text-2xl"
+                        className="absolute top-4 right-4"
                       >
-                        ✓
-                      </motion.span>
+                        <CheckCircle2 size={28} color={PALETTE.lime} fill="#000" />
+                      </motion.div>
                     )}
                     {wrongSelected && (
-                      <motion.span
+                      <motion.div
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
-                        className="absolute top-3 right-4 text-2xl"
+                        className="absolute top-4 right-4"
                       >
-                        ✗
-                      </motion.span>
+                        <XCircle size={28} color="#ef4444" fill="#000" />
+                      </motion.div>
                     )}
                   </motion.button>
                 );
               })}
             </motion.div>
 
-            {/* Hint (shown only when user taps it) */}
+            {/* Hint */}
             <AnimatePresence>
               {showHint && (
                 <motion.div
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
-                  className="flex items-start gap-4 overflow-hidden rounded-2xl px-6 py-5"
-                  style={{ background: T.surface, border: `1px solid ${T.teal}30` }}
+                  className="flex items-start gap-5 overflow-hidden px-6 py-6"
+                  style={{ background: PALETTE.teal, border: B, boxShadow: SH }}
                 >
-                  <span className="text-3xl shrink-0">🐶</span>
+                  <div className="w-12 h-12 flex items-center justify-center shrink-0" style={{ background: '#000', border: B }}>
+                    <Dog size={24} color={PALETTE.teal} />
+                  </div>
                   <div>
-                    <p className="font-black text-sm mb-1" style={{ color: T.teal }}>Piggy's Tip</p>
-                    <p className="text-sm leading-relaxed" style={{ color: T.textSub }}>
+                    <p className="font-black text-sm uppercase tracking-wider mb-2" style={{ color: '#000' }}>Piggy's Tip</p>
+                    <p className="font-bold text-sm leading-relaxed" style={{ color: '#1a3a38' }}>
                       Think about what happens when you put all your eggs in one basket versus spreading them out. Which approach protects you better if one investment fails?
                     </p>
                   </div>
@@ -227,18 +226,21 @@ export default function QuizPage() {
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="flex items-center gap-4 px-6 py-5 rounded-2xl"
+                  className="flex items-center gap-5 px-6 py-6"
                   style={{
-                    background: isCorrect(selected) ? `rgba(184,244,0,0.08)` : 'rgba(239,68,68,0.08)',
-                    border: `1px solid ${isCorrect(selected) ? T.lime : '#ef4444'}40`,
+                    background: isCorrect(selected) ? PALETTE.lime : '#ef4444',
+                    border: B,
+                    boxShadow: SH,
                   }}
                 >
-                  <span className="text-4xl">{isCorrect(selected) ? '🎉' : '😅'}</span>
+                  <div className="w-12 h-12 flex items-center justify-center shrink-0" style={{ background: '#000', border: B }}>
+                    {isCorrect(selected) ? <CheckCircle2 size={24} color={PALETTE.lime} /> : <XCircle size={24} color="#ef4444" />}
+                  </div>
                   <div>
-                    <p className="font-black" style={{ color: isCorrect(selected) ? T.lime : '#ef4444' }}>
+                    <p className="font-black text-lg uppercase tracking-tight mb-1" style={{ color: '#000' }}>
                       {isCorrect(selected) ? 'Correct! +50 XP earned' : 'Not quite right!'}
                     </p>
-                    <p className="text-sm mt-1" style={{ color: T.textSub }}>
+                    <p className="font-bold text-sm" style={{ color: '#1a3a38' }}>
                       {isCorrect(selected)
                         ? 'Diversification means spreading investments to lower risk.'
                         : 'The correct answer is B — mixing asset types reduces overall portfolio risk.'}
@@ -248,19 +250,19 @@ export default function QuizPage() {
               )}
             </AnimatePresence>
 
-            {/* Action row: secondary tools + primary CTA */}
+            {/* Action row */}
             <div className="flex items-center gap-3">
-              <div className="flex gap-2">
+              <div className="flex gap-3">
                 {[
-                  { label: 'Hint',     icon: <Lightbulb size={14} />, color: T.teal,   action: () => setShowHint(h => !h) },
-                  { label: 'Power Up', icon: <Flame size={14} />,     color: T.orange, action: () => {} },
-                  { label: 'Items',    icon: <PackageOpen size={14}/>, color: T.violet, action: () => {} },
+                  { label: 'Hint',     icon: <Lightbulb size={16} />, color: PALETTE.teal,   action: () => setShowHint(h => !h) },
+                  { label: 'Power Up', icon: <Flame size={16} />,     color: PALETTE.orange, action: () => {} },
+                  { label: 'Items',    icon: <PackageOpen size={16}/>, color: PALETTE.violet, action: () => {} },
                 ].map(({ label, icon, color, action }) => (
                   <button
                     key={label}
                     onClick={action}
-                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all hover:bg-white/10"
-                    style={{ border: `1px solid ${T.surfaceBorder}`, color }}
+                    className="flex items-center gap-2 px-5 py-3 font-black uppercase tracking-wider text-xs transition-all hover:-translate-y-0.5"
+                    style={{ background: PALETTE.base, border: B, color, boxShadow: SH_SM }}
                   >
                     {icon} {label}
                   </button>
@@ -271,11 +273,12 @@ export default function QuizPage() {
                 <motion.button
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  className="ml-auto px-8 py-3 rounded-xl font-black transition-all hover:brightness-110 active:scale-95"
+                  className="ml-auto px-8 py-4 font-black uppercase tracking-wider text-sm transition-all hover:-translate-y-0.5 active:translate-y-0"
                   style={{
-                    background: `linear-gradient(135deg,${T.teal},${T.violet})`,
-                    color: '#fff',
-                    boxShadow: '4px 4px 0 rgba(0,0,0,0.4)',
+                    background: PALETTE.teal,
+                    color: '#000',
+                    border: B,
+                    boxShadow: SH,
                   }}
                 >
                   Next Question →
@@ -284,77 +287,43 @@ export default function QuizPage() {
             </div>
           </div>
 
-          {/* ── Right Sidebar: context + stats ── */}
-          <div className="hidden lg:flex flex-col gap-5 shrink-0" style={{ width: 280 }}>
-            <div className="sticky top-20 flex flex-col gap-5">
+          {/* ── Right Sidebar ── */}
+          <div className="hidden lg:flex flex-col gap-5 shrink-0" style={{ width: 320 }}>
+            <div className="sticky top-[76px] flex flex-col gap-5">
 
               {/* Session stats */}
               <motion.div
                 initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
-                style={{ background: T.card, border: `1px solid ${T.cardBorder}`, borderRadius: 16, padding: 20 }}
+                style={{ background: PALETTE.base, border: B, boxShadow: SH, padding: 20 }}
               >
-                <p className="text-xs font-black tracking-widest uppercase mb-4" style={{ color: T.muted }}>This Session</p>
+                <p className="font-black text-xs uppercase tracking-widest mb-4" style={{ color: PALETTE.muted }}>This Session</p>
                 <div className="flex flex-col gap-3">
                   {[
-                    { label: 'Questions Done', value: `${CURRENT_Q - 1}/${ALL_QUESTIONS}`, color: T.teal   },
-                    { label: 'XP Earned',      value: `${(CURRENT_Q - 1) * 50}`,           color: T.lime   },
-                    { label: 'Accuracy',        value: '100%',                              color: T.violet },
-                    { label: 'Streak',          value: '🔥 3',                              color: T.orange },
+                    { label: 'Questions Done', value: `${CURRENT_Q - 1}/${ALL_QUESTIONS}`, color: PALETTE.teal   },
+                    { label: 'XP Earned',      value: `${(CURRENT_Q - 1) * 50}`,           color: PALETTE.lime   },
+                    { label: 'Accuracy',        value: '100%',                              color: PALETTE.violet },
+                    { label: 'Streak',          value: '3',                                 color: PALETTE.orange },
                   ].map(({ label, value, color }) => (
                     <div key={label} className="flex items-center justify-between">
-                      <span className="text-xs font-bold" style={{ color: T.textSub }}>{label}</span>
-                      <span className="text-sm font-black" style={{ color }}>{value}</span>
+                      <span className="font-bold text-xs" style={{ color: PALETTE.muted }}>{label}</span>
+                      <span className="font-black text-sm" style={{ color }}>{value}</span>
                     </div>
                   ))}
                 </div>
               </motion.div>
 
-              {/* Leaderboard mini */}
-              <motion.div
-                initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-                style={{ background: T.card, border: `1px solid ${T.cardBorder}`, borderRadius: 16, padding: 20 }}
-              >
-                <div className="flex items-center gap-2 mb-4">
-                  <Trophy size={16} color="#FFCD75" />
-                  <p className="text-xs font-black tracking-widest uppercase" style={{ color: T.muted }}>Leaderboard</p>
-                </div>
-                {[
-                  { rank: 1, name: 'FinanceKing', xp: 3240, color: '#FFCD75' },
-                  { rank: 2, name: 'MoneyMaya',   xp: 2980, color: '#94B0C2' },
-                  { rank: 3, name: 'CoinQueen',   xp: 2650, color: '#CD7F32' },
-                  { rank: 14, name: 'You',         xp: 0,    color: T.teal,   isYou: true },
-                ].map((p) => (
-                  <div
-                    key={p.rank}
-                    className="flex items-center justify-between py-2 text-xs font-bold"
-                    style={{
-                      borderBottom: `1px solid ${T.surfaceBorder}`,
-                      background: p.isYou ? `${T.teal}0D` : 'transparent',
-                      borderLeft: p.isYou ? `2px solid ${T.teal}` : '2px solid transparent',
-                      paddingLeft: p.isYou ? 8 : 0,
-                      margin: '0 -20px',
-                      padding: `8px ${p.isYou ? '20px 8px 20px' : '0 20px'}`,
-                    }}
-                  >
-                    <span style={{ color: p.isYou ? T.teal : T.muted, minWidth: 20 }}>#{p.rank}</span>
-                    <span className="flex-1 ml-2" style={{ color: p.isYou ? T.teal : T.text }}>{p.name}</span>
-                    <span style={{ color: p.color }}>{p.xp.toLocaleString()} XP</span>
-                  </div>
-                ))}
-              </motion.div>
-
               {/* Progress through this level */}
               <motion.div
                 initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
-                className="p-4 rounded-xl text-xs"
-                style={{ background: `${T.violet}10`, border: `1px solid ${T.violet}20`, color: T.textSub }}
+                className="p-5"
+                style={{ background: `${PALETTE.violet}22`, border: `3px solid ${PALETTE.violet}` }}
               >
-                <span style={{ color: T.violet }} className="font-black">📍 Saving Goals</span>
-                <span className="ml-1">— Question {CURRENT_Q} of {ALL_QUESTIONS}</span>
-                <div className="mt-2 h-1.5 rounded-full" style={{ background: T.surfaceBorder }}>
+                <p className="font-black text-xs uppercase mb-1" style={{ color: PALETTE.violet }}>📍 Saving Goals</p>
+                <p className="font-bold text-xs" style={{ color: PALETTE.muted }}>Question {CURRENT_Q} of {ALL_QUESTIONS}</p>
+                <div className="mt-4 h-2" style={{ background: '#2a2a4a', border: B }}>
                   <div
-                    className="h-full rounded-full"
-                    style={{ width: `${(CURRENT_Q / ALL_QUESTIONS) * 100}%`, background: T.violet }}
+                    className="h-full"
+                    style={{ width: `${(CURRENT_Q / ALL_QUESTIONS) * 100}%`, background: PALETTE.violet }}
                   />
                 </div>
               </motion.div>

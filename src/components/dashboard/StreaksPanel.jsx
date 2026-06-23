@@ -1,51 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { Flame } from 'lucide-react';
+import { motion } from 'framer-motion';
 
-const useMidnightCountdown = () => {
-  const getSecondsLeft = () => {
-    const now = new Date();
-    const midnight = new Date();
-    midnight.setHours(24, 0, 0, 0);
-    return Math.floor((midnight - now) / 1000);
-  };
-  const [secs, setSecs] = useState(getSecondsLeft);
-  useEffect(() => { const t = setInterval(() => setSecs(getSecondsLeft()), 1000); return () => clearInterval(t); }, []);
-  const h = String(Math.floor(secs / 3600)).padStart(2, '0');
-  const m = String(Math.floor((secs % 3600) / 60)).padStart(2, '0');
-  const s = String(secs % 60).padStart(2, '0');
-  return `${h}:${m}:${s}`;
+const B    = '3px solid #000';
+const SH   = '5px 5px 0 #000';
+
+const PALETTE = {
+  base:   '#1A1A2E',
+  orange: '#F97316',
+  text:   '#F4F4F4',
+  muted:  '#94A3B8',
 };
 
-const Cursor = () => {
-  const [v, setV] = useState(true);
-  useEffect(() => { const t = setInterval(() => setV(x => !x), 500); return () => clearInterval(t); }, []);
-  return <span style={{ opacity: v ? 1 : 0 }}>_</span>;
-};
-
-const PixelFlame = ({ size = 1 }) => {
-  const [frame, setFrame] = useState(0);
-  const frames = [
-    'polygon(50% 0%, 80% 40%, 70% 60%, 90% 70%, 60% 100%, 40% 100%, 10% 70%, 30% 60%, 20% 40%)',
-    'polygon(50% 5%, 78% 38%, 68% 58%, 88% 68%, 58% 100%, 42% 100%, 12% 68%, 32% 58%, 22% 38%)',
-  ];
-  useEffect(() => { const t = setInterval(() => setFrame(f => 1 - f), 280); return () => clearInterval(t); }, []);
-  return (
-    <div style={{
-      width: 32 * size, height: 42 * size,
-      background: 'linear-gradient(to top, #F97316, #FFCD75)',
-      clipPath: frames[frame],
-      imageRendering: 'pixelated', flexShrink: 0,
-    }} />
-  );
-};
-
-const ClockIcon = ({ size = 14, color = 'currentColor' }) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={2.5} width={size} height={size} style={{ display: 'inline-block', verticalAlign: 'middle' }}>
-    <circle cx="12" cy="12" r="10" />
-    <polyline points="12 6 12 12 16 14" />
-  </svg>
-);
-
-const DAYS   = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+const DAYS = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
 const StreaksPanel = ({ currentStreak = 0 }) => {
   // For brand new user: all days inactive
@@ -53,59 +20,57 @@ const StreaksPanel = ({ currentStreak = 0 }) => {
 
   return (
     <div
-      className="rounded-xl overflow-hidden"
+      className="p-6"
       style={{
-        background: 'rgba(18,10,45,0.75)',
-        border: '2px solid rgba(249,115,22,0.3)',
-        backdropFilter: 'blur(10px)',
+        background: PALETTE.base,
+        border: B,
+        boxShadow: SH,
       }}
     >
       {/* Header: streak count */}
-      <div className="flex items-center justify-center pt-5 pb-3">
-        <div className="flex items-center gap-3">
-          <PixelFlame />
-          <div>
-            <div className="font-black" style={{ fontSize: 52, color: '#F97316', lineHeight: 1, fontFamily: 'Inter, sans-serif', textShadow: '3px 3px 0 rgba(122,56,0,0.6)' }}>
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <p className="font-black text-xs uppercase tracking-widest" style={{ color: PALETTE.orange }}>
+            Current Streak
+          </p>
+          <div className="flex items-end gap-2 mt-1">
+            <span className="font-black" style={{ fontSize: 48, color: PALETTE.text, lineHeight: 1 }}>
               {currentStreak}
-            </div>
-            <div className="text-xs font-semibold" style={{ color: '#94B0C2' }}>day streak</div>
+            </span>
+            <span className="font-bold text-sm mb-1.5" style={{ color: PALETTE.muted }}>days</span>
           </div>
+        </div>
+        <div className="w-14 h-14 flex items-center justify-center" style={{ background: '#000', border: B }}>
+          <Flame size={28} color={PALETTE.orange} fill={PALETTE.orange} />
         </div>
       </div>
 
       {/* Day tiles */}
-      <div className="px-5 mb-4">
-        <div className="flex justify-between items-center px-3 py-3 rounded-lg"
-          style={{ background: 'rgba(10,4,28,0.5)', border: '1px solid rgba(255,255,255,0.05)' }}>
-          {DAYS.map((day, i) => (
-            <div key={i} className="flex flex-col items-center gap-1.5">
-              <span className="text-[10px] font-bold" style={{ color: '#566C86' }}>{day}</span>
-              <div style={{
-                width: 20, height: 20,
-                border: `2px solid ${ACTIVE[i] ? '#F97316' : 'rgba(255,255,255,0.1)'}`,
-                background: ACTIVE[i] ? 'rgba(249,115,22,0.25)' : 'transparent',
-                imageRendering: 'pixelated',
-                borderRadius: 2,
-              }} />
-            </div>
-          ))}
-        </div>
+      <div className="flex justify-between items-center px-4 py-4 mb-6" style={{ background: '#000', border: B }}>
+        {DAYS.map((day, i) => (
+          <div key={i} className="flex flex-col items-center gap-2">
+            <span className="text-[10px] font-black uppercase" style={{ color: PALETTE.muted }}>{day}</span>
+            <div style={{
+              width: 24, height: 24,
+              border: B,
+              background: ACTIVE[i] ? PALETTE.orange : '#2a2a4a',
+            }} />
+          </div>
+        ))}
       </div>
 
       {/* CTA */}
-      <div className="px-5 pb-5">
-        <button
-          className="w-full py-3 font-pixel text-[10px] rounded-lg pixel-btn uppercase"
-          style={{
-            background: '#F97316',
-            color: '#0A0A1A',
-            border: '2px solid #7A3800',
-            boxShadow: '4px 4px 0 #7A3800',
-          }}
-        >
-          &gt; START <Cursor />
-        </button>
-      </div>
+      <button
+        className="w-full py-4 font-black uppercase tracking-wider text-sm transition-all hover:-translate-y-0.5"
+        style={{
+          background: PALETTE.orange,
+          color: '#000',
+          border: B,
+          boxShadow: '4px 4px 0 #000',
+        }}
+      >
+        Start Lesson →
+      </button>
     </div>
   );
 };
